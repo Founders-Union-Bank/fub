@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         UserModel users = modelMapper.map(user, UserModel.class);
         users.setPassword(passwordEncoder.encode(users.getPassword()));
         users.setUserId(UUID.randomUUID().toString());
-        users.setRoles("ROLE_USER");
+        users.setRoles("USER");
         users.setCreateDate(new Date());
         UserModel userModel = userRepository.save(users);
         return modelMapper.map(userModel, UserResponse.class);

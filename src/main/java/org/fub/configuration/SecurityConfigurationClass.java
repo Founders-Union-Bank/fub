@@ -21,22 +21,13 @@ public class SecurityConfigurationClass {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request->request.anyRequest().permitAll());
+        http.authorizeHttpRequests(request->request.anyRequest().authenticated());
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(Customizer.withDefaults());
         http.sessionManagement(smc->smc.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
-
-//    @Bean
-//    UserDetailsService userDetailsService(){
-//       UserDetails user  =User.withUsername("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .build();
-//
-//       return new InMemoryUserDetailsManager(user);
-//    }
 
     @Bean
     PasswordEncoder passwordEncoder(){

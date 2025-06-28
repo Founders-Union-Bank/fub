@@ -123,6 +123,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>fub-v1</finalName>
 	</build>
 
 </project>
