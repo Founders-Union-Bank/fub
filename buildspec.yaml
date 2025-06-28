@@ -1,11 +1,11 @@
-version: 0.2
+version: 0.1
 
 phases:
   build:
     commands:
       - echo Build Started Successfully
       - mvn clean package
-    post_build:
+    post-build:
       commands:
         - echo Build Completed Successfully
 
