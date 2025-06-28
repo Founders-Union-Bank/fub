@@ -7,6 +7,6 @@ public class TestController implements TestAPI {
 
     @Override
     public String setup() {
-        return "Server up and running";
+        return "Server up and running..........";
     }
 }
