@@ -45,4 +45,6 @@ public class UserModel {
     private Date lastLogin;
     @Column(name = "roles")
     private String roles;
+    @Column(name = "isAdmin")
+    private boolean isAdmin;
 }

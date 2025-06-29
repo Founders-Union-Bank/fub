@@ -23,7 +23,8 @@ public class SecurityConfigurationClass {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request->
-                request.requestMatchers("/login").permitAll()
+                request.requestMatchers(
+                        "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated());
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
