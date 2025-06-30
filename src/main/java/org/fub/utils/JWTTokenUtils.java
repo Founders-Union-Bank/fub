@@ -41,8 +41,10 @@ public class JWTTokenUtils {
                     .setSubject("FUB")
                     .setIssuedAt(createdAt)
                     .setExpiration(expiryDate)
+                    .claim("userId",userName)
+                    .claim("isAdmin",user.isAdmin())
+                    .claim("role",user.getRoles())
                     .setIssuer("FUB")
-                    .setSubject(user.getUserId())
                     .signWith(key,SignatureAlgorithm.HS512)
                     .compact();
 

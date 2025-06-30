@@ -24,7 +24,7 @@ public class AuthController {
     private JWTTokenUtils utils;
 
     @Hidden
-    @PostMapping(value = "/login",consumes = {"application/json"})
+    @PostMapping(value = "/login",consumes = {"application/json"},produces = {"application/json"})
     ResponseEntity<JWTTokenResponse> authenticate(@RequestBody LoginRequest request, HttpServletResponse response){
         Authentication authentication = authenticationManager
                        .authenticate(new UsernamePasswordAuthenticationToken(request.getUserName()
