@@ -1,6 +1,7 @@
-package org.fub.controller.API;
+package org.fub.controller;
 
 import lombok.AllArgsConstructor;
+import org.fub.controller.API.PaymentDetailAPI;
 import org.fub.model.PaymentDetail;
 import org.fub.request.PaymentDetailRequest;
 import org.fub.service.PaymentService;
