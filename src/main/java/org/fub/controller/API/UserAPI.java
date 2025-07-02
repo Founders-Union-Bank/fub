@@ -22,7 +22,7 @@ public interface UserAPI {
 
     @Operation(summary = "Create user", description = "Create a new user ", tags = {"User"})
     @ApiResponse(responseCode = "201", description = "User Created Successfully")
-    @PostMapping(value = "/users")
+    @PostMapping(value = "/users/register")
     ResponseEntity<UserResponse> createUser(
             @Parameter(in = ParameterIn.DEFAULT, description = "user body") @Valid @NotNull @RequestBody UserRequest user
     );

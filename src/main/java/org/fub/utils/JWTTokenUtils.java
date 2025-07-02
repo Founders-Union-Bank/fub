@@ -2,28 +2,24 @@ package org.fub.utils;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.fub.exception.JWTTokenCreationException;
 import org.fub.exception.UserNotFoundException;
 import org.fub.model.UserModel;
 import org.fub.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JWTTokenUtils {
 
-    @Value("${app.jwtSecret}")
-    private String jwtSecretKey;
+    private final String jwtSecretKey="FOUNDERSUNIONBANKAPPLICATIONSECRETKEYAUTHOURSARANKUMARVIJAYANHFSAHSAHSADHAGDGHGASDHSDHHJSDKAJSKFJSAF";
 
-    @Value("${app.jwtExpirationMs}")
-    private int expirationTime;
-
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private final int expirationTime= 3600000;
 
     @Autowired
     private UserRepository repository;
@@ -34,20 +30,18 @@ public class JWTTokenUtils {
     public String getJWTToken(String userName) {
         String token = null;
 
-       UserModel user = repository.findByEmail(userName).orElseThrow(()->new UserNotFoundException("User doesn't exist with the username or check the credentials"));
+        UserModel user = repository.findByEmail(userName).orElseThrow(()->new UserNotFoundException("User doesn't exist with the username or check the credentials"));
 
         try {
             token = Jwts.builder()
                     .setSubject("FUB")
                     .setIssuedAt(createdAt)
                     .setExpiration(expiryDate)
-                    .claim("userId",userName)
+                    .claim("userId",user.getUserId())
                     .claim("isAdmin",user.isAdmin())
                     .claim("role",user.getRoles())
-                    .setIssuer("FUB")
-                    .signWith(key,SignatureAlgorithm.HS512)
+                    .signWith(getSecretKey(),SignatureAlgorithm.HS512)
                     .compact();
-
             return token;
         }
         catch (Exception e) {
@@ -57,9 +51,13 @@ public class JWTTokenUtils {
 
     public String getUsernameFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(key)
+                .setSigningKey(getSecretKey())
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public SecretKey getSecretKey(){
+         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey));
     }
 }
