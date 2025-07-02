@@ -1,4 +1,4 @@
-package org.fub.service;
+package org.fub.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.fub.exception.UserNotFoundException;
@@ -6,7 +6,7 @@ import org.fub.model.UserModel;
 import org.fub.repository.UserRepository;
 import org.fub.request.UserRequest;
 import org.fub.response.UserResponse;
-import org.fub.service.impl.UserService;
+import org.fub.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

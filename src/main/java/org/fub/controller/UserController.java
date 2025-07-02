@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.fub.controller.API.UserAPI;
 import org.fub.request.UserRequest;
 import org.fub.response.UserResponse;
-import org.fub.service.impl.UserService;
+import org.fub.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

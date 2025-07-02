@@ -1,4 +1,4 @@
-package org.fub.service.impl;
+package org.fub.service;
 
 import org.fub.request.UserRequest;
 import org.fub.response.UserResponse;
