@@ -48,7 +48,5 @@ public class UserModel {
     @Column(name = "isAdmin")
     private boolean isAdmin;
     @Column(name = "groupId")
-    private String groupId;
-    @Column(name = "groupName")
-    private String groupName;
+    private Long groupId;
 }

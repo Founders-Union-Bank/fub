@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends JpaRepository<PaymentDetail,String> {
 
-    boolean deleteByAmountDetailId(String id);
+    int deleteByAmountDetailId(String id);
 
     List<PaymentDetail> findAllByUserId(String userId);
 }

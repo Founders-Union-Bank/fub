@@ -37,7 +37,7 @@ public class SecurityConfigurationClass {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request->
                         request.requestMatchers("/v3/api-docs/**", "/swagger-ui/**","test","/login","/users/register").permitAll()
-                                .anyRequest().permitAll());
+                                .anyRequest().authenticated());
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(Customizer.withDefaults());
         http.addFilterBefore(new JWTTokenValidatorFilter(utils), UsernamePasswordAuthenticationFilter.class);

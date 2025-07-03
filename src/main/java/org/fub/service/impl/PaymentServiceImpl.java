@@ -1,11 +1,13 @@
 package org.fub.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.fub.model.PaymentDetail;
 import org.fub.repository.PaymentRepository;
 import org.fub.request.PaymentDetailRequest;
 import org.fub.service.PaymentService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -45,11 +47,13 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
+    @Transactional
+    @Modifying
     @Override
     public boolean deletePaymentDetails(String userId, String paymentId) {
         Optional<PaymentDetail> paymentDetail = repository.findById(paymentId);
         if (paymentDetail.isPresent()) {
-            return repository.deleteByAmountDetailId(paymentId);
+            return repository.deleteByAmountDetailId(paymentId)==1;
         } else {
             throw new RuntimeException("Payment Details doesn't exist");
         }
