@@ -1,6 +1,7 @@
 package org.fub.service.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.fub.exception.UserNotFoundException;
 import org.fub.model.UserModel;
 import org.fub.repository.UserRepository;
@@ -13,11 +14,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -64,8 +67,8 @@ public class UserServiceImpl implements UserService {
         }
         model.get().setActive(false);
 
-        UserModel userModel= userRepository.save(model.get());
-        return userModel !=null;
+        UserModel userModel = userRepository.save(model.get());
+        return userModel != null;
     }
 
     @Override
@@ -79,8 +82,26 @@ public class UserServiceImpl implements UserService {
         oldUserData.setLastName(user.getLastName());
         oldUserData.setMobileNumber(user.getMobileNumber());
         oldUserData.setPassword(passwordEncoder.encode(user.getPassword()));
-        UserModel savedUser =userRepository.save(oldUserData);
+        UserModel savedUser = userRepository.save(oldUserData);
         return modelMapper.map(savedUser, UserResponse.class);
+    }
+
+    @Override
+    public byte[] uploadProfile(String userId, MultipartFile file) {
+
+        if (!file.isEmpty()) {
+            try {
+                byte[] profileData = file.getBytes();
+                UserModel model = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with user id " + userId + " not found"));
+                model.setProfileImage(profileData);
+                userRepository.save(model);
+                return profileData;
+            } catch (Exception e) {
+                log.info("Updating profile image to user failed",e.getMessage());
+                throw new RuntimeException("Updating profile image to user failed :"+e.getMessage(),e);
+            }
+        }
+        return new byte[0];
     }
 
     @Override

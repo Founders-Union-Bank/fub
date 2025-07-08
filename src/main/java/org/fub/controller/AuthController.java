@@ -34,5 +34,4 @@ public class AuthController {
 
         return ResponseEntity.ok(new JWTTokenResponse(utils.getJWTToken(request.getUserName())));
     }
-
 }

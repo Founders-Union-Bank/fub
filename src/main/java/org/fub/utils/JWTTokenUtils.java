@@ -24,8 +24,6 @@ public class JWTTokenUtils {
     @Autowired
     private UserRepository repository;
 
-    Date createdAt = new Date();
-    Date expiryDate = new Date(createdAt.getTime()+expirationTime);
 
     public String getJWTToken(String userName) {
         String token = null;
@@ -35,8 +33,8 @@ public class JWTTokenUtils {
         try {
             token = Jwts.builder()
                     .setSubject("FUB")
-                    .setIssuedAt(createdAt)
-                    .setExpiration(expiryDate)
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(new Date().getTime()+expirationTime))
                     .claim("userId",user.getUserId())
                     .claim("isAdmin",user.isAdmin())
                     .claim("role",user.getRoles())

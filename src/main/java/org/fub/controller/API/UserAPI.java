@@ -1,5 +1,6 @@
 package org.fub.controller.API;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -8,11 +9,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.websocket.OnError;
 import org.fub.request.UserRequest;
 import org.fub.response.UserResponse;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,5 +53,15 @@ public interface UserAPI {
     ResponseEntity<UserResponse> updateUser(
             @Parameter(in = ParameterIn.PATH,description = "Id of the User") @NotNull @NotEmpty @PathVariable(name = "userId") String userId,
             @Parameter(in = ParameterIn.DEFAULT,description = "Body of the user") @Valid @NotNull @RequestBody UserRequest user
+            );
+
+
+    @Hidden
+    @Operation(summary = "Upload User Profile", description = "Upload user profile")
+    @ApiResponse(responseCode = "200",description = "User Profile Uploaded Success")
+    @PatchMapping(value = "/users/{userId}/upload-profile",produces = {MediaType.IMAGE_GIF_VALUE,MediaType.IMAGE_JPEG_VALUE,MediaType.IMAGE_PNG_VALUE})
+    ResponseEntity<byte[]> uploadUserProfile(
+            @Parameter(in = ParameterIn.PATH,description = "Id of the User") @NotNull @NotEmpty @PathVariable(name = "userId") String userId,
+            @Parameter(description = "Profile picture of the user") @NotNull @RequestPart(value = "formData") MultipartFile file
             );
 }

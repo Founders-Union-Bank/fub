@@ -21,4 +21,5 @@ public class UserResponse {
     private Date createDate;
     private Date lastLogin;
     private String roles;
+    private byte[] profileImage;
 }

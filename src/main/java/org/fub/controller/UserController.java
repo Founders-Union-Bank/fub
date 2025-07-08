@@ -8,6 +8,7 @@ import org.fub.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -48,6 +49,12 @@ public class UserController implements UserAPI {
     public ResponseEntity<UserResponse> updateUser(String userId, UserRequest user) {
         UserResponse model = userService.updateUser(userId,user);
         return new ResponseEntity<>(model, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> uploadUserProfile(String userId, MultipartFile file) {
+       byte [] profileData = userService.uploadProfile(userId, file);
+       return new ResponseEntity<byte[]>(profileData,HttpStatus.OK);
     }
 
 }

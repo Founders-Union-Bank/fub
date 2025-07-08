@@ -49,4 +49,7 @@ public class UserModel {
     private boolean isAdmin;
     @Column(name = "groupId")
     private Long groupId;
+    @Column(name = "profile_image",columnDefinition = "TEXT")
+    @Lob
+    private byte[] profileImage;
 }
