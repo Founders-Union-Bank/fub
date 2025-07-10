@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "users")
 @Data
@@ -19,6 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserModel {
     @Id
+    @Column(name = "user_id")
     private String userId;
     @NotNull
     @Column(name = "firstName")
@@ -47,9 +50,14 @@ public class UserModel {
     private String roles;
     @Column(name = "isAdmin")
     private boolean isAdmin;
-    @Column(name = "groupId")
-    private Long groupId;
-    @Column(name = "profile_image",columnDefinition = "TEXT")
+    @Column(name = "profile_image_url",columnDefinition = "TEXT")
     @Lob
-    private byte[] profileImage;
+    private byte[] profileImageURL;
+
+    @ManyToMany(targetEntity = CrewModel.class)
+    Set<CrewModel> crews = new HashSet<>();
+
+    public void addCrew(CrewModel crew){
+        crews.add(crew);
+    }
 }

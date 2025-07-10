@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.websocket.OnError;
 import org.fub.request.UserRequest;
 import org.fub.response.UserResponse;
 import org.springframework.http.MediaType;
@@ -54,7 +53,6 @@ public interface UserAPI {
             @Parameter(in = ParameterIn.PATH,description = "Id of the User") @NotNull @NotEmpty @PathVariable(name = "userId") String userId,
             @Parameter(in = ParameterIn.DEFAULT,description = "Body of the user") @Valid @NotNull @RequestBody UserRequest user
             );
-
 
     @Hidden
     @Operation(summary = "Upload User Profile", description = "Upload user profile")
