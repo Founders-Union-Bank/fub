@@ -30,6 +30,8 @@ public class CrewModel {
     private String createdBy;
     @Column
     private int maxMember;
+    @Column
+    private int totalMember;
     @Column(name = "modified_date")
     private Date modifiedDate;
     @Column(name = "modified_by")

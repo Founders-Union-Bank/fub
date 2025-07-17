@@ -10,6 +10,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.fub.request.CrewRequest;
 import org.fub.response.CrewResponse;
+import org.fub.response.UserGroupsResponse;
+import org.fub.response.UserResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,7 +35,7 @@ public interface GroupAPI {
     @ApiResponse(responseCode = "200",description = "Users Added success")
     @ApiResponse(responseCode = "404", description ="Group not found" )
     @PatchMapping(value = "/groups/{groupId}/add-user",produces = {MediaType.APPLICATION_JSON_VALUE})
-    ResponseEntity<CrewResponse> addUsersToGroup(
+    ResponseEntity<UserGroupsResponse> addUsersToGroup(
             @Parameter(in = ParameterIn.QUERY,description = "User the needs to be added to the group") @NotNull @NotEmpty @RequestParam(value = "ids") List<String> userIds,
             @Parameter(in = ParameterIn.PATH,description = "Group Id") @NotNull @PathVariable(value = "groupId") Long groupId
             );
@@ -56,6 +58,24 @@ public interface GroupAPI {
     );
 
     @Operation(summary = "Fetch All groups")
-    @GetMapping("/groups")
-    ResponseEntity<List<CrewResponse>> fetchAllGroups();
+    @GetMapping(value = "/groups",produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<CrewResponse>> fetchAllGroups(
+            @Parameter(in = ParameterIn.QUERY, description = "Search text") @NotNull @RequestParam(value = "searchText") String searchText
+    );
+
+    @Operation(summary = "Fetch Groups by user id")
+    @GetMapping(value = "/groups/users",produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponse(responseCode = "200",description = "Users Removed from the group successfully")
+    @ApiResponse(responseCode = "404",description = "Group Not found")
+    ResponseEntity<UserGroupsResponse> fetchGroupsByUser(
+            @Parameter(in = ParameterIn.QUERY,description = "userId") @NotNull @RequestParam(value = "userId") String userId
+    );
+
+    @Operation(summary = "Fetch Users from the crew")
+    @GetMapping(value = "/groups/{crewId}/users")
+    @ApiResponse(responseCode = "200",description = "Users Removed from the group successfully")
+    @ApiResponse(responseCode = "404",description = "Group Not found")
+    ResponseEntity<List<UserResponse>> fetchUsersFromGroup(
+            @Parameter(in = ParameterIn.PATH,description = "Crew") @NotNull @PathVariable(value = "crewId") Long crewId
+    );
 }

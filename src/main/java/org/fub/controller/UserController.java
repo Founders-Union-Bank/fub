@@ -54,7 +54,7 @@ public class UserController implements UserAPI {
     @Override
     public ResponseEntity<byte[]> uploadUserProfile(String userId, MultipartFile file) {
        byte [] profileData = userService.uploadProfile(userId, file);
-       return new ResponseEntity<byte[]>(profileData,HttpStatus.OK);
+       return new ResponseEntity<>(profileData,HttpStatus.OK);
     }
 
 }

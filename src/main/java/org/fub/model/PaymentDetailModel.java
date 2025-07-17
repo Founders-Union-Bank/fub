@@ -14,10 +14,10 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDetail {
+public class PaymentDetailModel {
     @Id
-    @Column(name = "amount_details_id")
-    private String amountDetailId;
+    @Column(name = "payment_id")
+    private String paymentId;
     @Column(name = "userId", nullable = false)
     @NotNull
     private String userId;
@@ -30,10 +30,11 @@ public class PaymentDetail {
     @NotNull
     @Column(name = "billing_month",nullable = false)
     private Date billingMonth;
-    @NotNull
     @Column(name = "paymentDate",nullable = false)
     private Date paymentDate;
     @Column(name = "paymentProof")
     private byte[] proofData;
+    @Column(name = "crew_id")
+    private Long crewId;
 
 }

@@ -19,15 +19,16 @@ public class CrewResponse {
     private String createdBy;
     private Date modifiedDate;
     private String modifiedBy;
+    private int totalMember;
     private int maxMember;
     private int months;
-    private List<UserResponse> users = new ArrayList<>();
-
-    public void addUser(UserResponse user){
-        users.add(user);
-    }
-
-    public void addUsers(List<UserResponse> user){
-        users.addAll(user);
-    }
+//    private List<UserResponse> users = new ArrayList<>();
+//
+//    public void addUser(UserResponse user){
+//        users.add(user);
+//    }
+//
+//    public void addUsers(List<UserResponse> user){
+//        users.addAll(user);
+//    }
 }
