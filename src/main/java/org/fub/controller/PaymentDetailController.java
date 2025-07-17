@@ -1,8 +1,9 @@
 package org.fub.controller;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.fub.controller.API.PaymentDetailAPI;
-import org.fub.model.PaymentDetail;
+import org.fub.request.PaymentDetail;
 import org.fub.request.PaymentDetailRequest;
 import org.fub.service.PaymentService;
 import org.springframework.http.HttpStatus;
@@ -20,18 +21,18 @@ public class PaymentDetailController implements PaymentDetailAPI {
     @Override
     public ResponseEntity<PaymentDetail> createPayment(PaymentDetailRequest paymentDetail) {
         PaymentDetail detail = service.createPaymentDetails(paymentDetail);
-        return new ResponseEntity<PaymentDetail>(detail, HttpStatus.CREATED);
+        return new ResponseEntity<>(detail, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<List<PaymentDetail>> fetchPaymentsDetail(String userId) {
-        List<PaymentDetail> details = service.fetchPaymentsDetail(userId);
-        return new ResponseEntity<List<PaymentDetail>>(details, HttpStatus.OK);
+    public ResponseEntity<List<PaymentDetail>> fetchPaymentsDetails(String userId, Long crewId) {
+        List<PaymentDetail> details = service.fetchPaymentsDetails(userId, crewId);
+        return new ResponseEntity<>(details, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<String> deletePaymentDetails(String userId, String paymentId) {
-        boolean isDeleted = service.deletePaymentDetails(userId, paymentId);
+        boolean isDeleted = service.deletePaymentDetail(userId, paymentId);
         if (isDeleted) {
             return ResponseEntity.ok("Payment Details Deleted successfully");
         } else {
@@ -40,14 +41,20 @@ public class PaymentDetailController implements PaymentDetailAPI {
     }
 
     @Override
-    public ResponseEntity<PaymentDetail> fetchPaymentDetails(String userId, String paymentId) {
-        PaymentDetail paymentDetail = service.fetchPaymentDetails(userId, paymentId);
-        return new ResponseEntity<PaymentDetail>(paymentDetail, HttpStatus.OK);
+    public ResponseEntity<PaymentDetail> fetchPaymentDetails(String userId, String paymentId, Long crewId) {
+        PaymentDetail paymentDetail = service.fetchPaymentDetail(userId, paymentId, crewId);
+        return new ResponseEntity<>(paymentDetail, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<PaymentDetail> updatePaymentDetails(String userId, String paymentId, PaymentDetailRequest request) {
-        PaymentDetail paymentDetail = service.updatePaymentDetails(userId, paymentId, request);
-        return new ResponseEntity<PaymentDetail>(paymentDetail, HttpStatus.OK);
+    public ResponseEntity<PaymentDetail> updatePaymentDetails(String userId, String paymentId, Long crewId, PaymentDetail paymentDetail) {
+        PaymentDetail payment = service.updatePaymentDetails(userId, paymentId,crewId ,paymentDetail);
+        return new ResponseEntity<>(payment, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<String> generatePaymentDetailsForMembers(Long crewId) {
+        boolean isSuccess = service.generatePaymentDetailsForMembers(crewId);
+        return new ResponseEntity<>("Payment Generated Successfully", HttpStatus.OK);
     }
 }

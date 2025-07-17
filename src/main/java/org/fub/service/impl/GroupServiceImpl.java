@@ -2,12 +2,13 @@ package org.fub.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.fub.exception.UserNotFoundException;
-import org.fub.model.GroupModel;
+import org.fub.model.CrewModel;
 import org.fub.model.UserModel;
 import org.fub.repository.GroupRepository;
 import org.fub.repository.UserRepository;
-import org.fub.request.GroupRequest;
-import org.fub.response.GroupResponse;
+import org.fub.request.CrewRequest;
+import org.fub.response.CrewResponse;
+import org.fub.response.UserGroupsResponse;
 import org.fub.response.UserResponse;
 import org.fub.service.GroupService;
 import org.modelmapper.ModelMapper;
@@ -27,44 +28,58 @@ public class GroupServiceImpl implements GroupService {
     private ModelMapper mapper;
 
     @Override
-    public GroupResponse createGroup(String userId, GroupRequest group) {
-        GroupModel model = mapper.map(group, GroupModel.class);
-        model.setCreatedBy(userId);
+    public CrewResponse createGroup(CrewRequest group) {
+        CrewModel model = mapper.map(group, CrewModel.class);
         model.setCreatedDate(new Date());
-        model.setGroupId((long) ThreadLocalRandom.current().nextInt(1000000, 10000000));
+        model.setCrewId((long) ThreadLocalRandom.current().nextInt(1000000, 10000000));
 
-        GroupModel savedGroup = groupRepository.save(model);
-        return mapper.map(savedGroup, GroupResponse.class);
+        CrewModel savedGroup = groupRepository.save(model);
+        return mapper.map(savedGroup, CrewResponse.class);
     }
 
     @Override
-    public GroupResponse fetchGroup(Long groupId) {
-        GroupModel model = groupRepository.findById(groupId).orElseThrow(()->new RuntimeException("Group doesn't exist"));
-        GroupResponse response=mapper.map(model, GroupResponse.class);
-        List<UserModel> users = userRepository.findAllByGroupId(groupId);
-        response.setUsers(users.stream().filter(Objects::nonNull)
-                .map(user->mapper.map(user, UserResponse.class)).toList());
-
-        return response;
+    public CrewResponse fetchGroup(Long groupId) {
+        CrewModel model = groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("Group doesn't exist"));
+        return mapper.map(model, CrewResponse.class);
     }
 
     @Override
-    public GroupResponse addUsersToGroup(List<String> userIds, Long groupId) {
-        GroupModel model = groupRepository.findById(groupId).orElseThrow(()->new RuntimeException("Group doesn't exist"));
-        GroupResponse response=mapper.map(model, GroupResponse.class);
-
-        userIds.forEach(userId -> {
-            UserModel user = userRepository.findById(userId)
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
-            user.setGroupId(groupId);
-            userRepository.save(user);
+    public UserGroupsResponse addUsersToGroup(List<String> userIds, Long groupId) {
+        CrewModel model = groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("Group doesn't exist"));
+        userIds.forEach(user -> {
+            UserModel userModel = userRepository.findById(user).orElseThrow(() -> new UserNotFoundException("User Doesn't exist for the id : " + user));
+            userModel.addCrew(model);
+            model.addUser(userModel);
         });
+        model.setTotalMember(model.getUsers().size());
+        groupRepository.save(model);
 
-        List<UserModel> users = userRepository.findAllByGroupId(groupId);
+        return fetchGroupsByUserId(userIds.get(0));
+    }
 
-        response.setUsers(users.stream().filter(Objects::nonNull)
-                .map(user->mapper.map(user, UserResponse.class)).toList());
+    @Override
+    public List<CrewResponse> fetchAllGroups(String searchText) {
+        List<CrewModel> crews = groupRepository.findByCrewNameLikeIgnoreCase(searchText);
+        return crews.stream().map(crew -> {
+            return mapper.map(crew, CrewResponse.class);
+        }).toList();
+    }
 
+    @Override
+    public UserGroupsResponse fetchGroupsByUserId(String userId) {
+        UserModel userModel = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User doesn't exist"));
+        UserGroupsResponse response = new UserGroupsResponse();
+        response.setCrews(userModel
+                .getCrews()
+                .stream()
+                .map(crew->mapper.map(crew,CrewResponse.class))
+                .toList());
         return response;
+    }
+
+    @Override
+    public List<UserResponse> getAllUsersFromTheCrew(Long crewId) {
+        CrewModel crew = groupRepository.findById(crewId).orElseThrow(() -> new RuntimeException("Crew Not Found"));
+        return crew.getUsers().stream().map(user -> mapper.map(user, UserResponse.class)).toList();
     }
 }

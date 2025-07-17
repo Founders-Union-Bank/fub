@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
             try {
                 byte[] profileData = file.getBytes();
                 UserModel model = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User with user id " + userId + " not found"));
-                model.setProfileImage(profileData);
+//                model.setProfileImage(profileData);
                 userRepository.save(model);
                 return profileData;
             } catch (Exception e) {

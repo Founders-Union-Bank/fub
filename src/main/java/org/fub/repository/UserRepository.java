@@ -12,5 +12,5 @@ public interface UserRepository extends JpaRepository<UserModel,String> {
 
     Optional<UserModel> findByEmail(String email);
 
-    List<UserModel> findAllByGroupId(Long groupId);
+//    List<UserModel> findAllByGroupId(Long groupId);
 }

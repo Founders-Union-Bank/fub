@@ -1,15 +1,15 @@
 package org.fub.request;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
 
-@NoArgsConstructor
 @Setter
 @Getter
-public class PaymentDetailRequest {
+public class PaymentDetail {
+
+    private String paymentId;
 
     private String userId;
 
@@ -21,6 +21,5 @@ public class PaymentDetailRequest {
 
     private Date paymentDate;
 
-    private Long crewId;
-
+    private Long groupId;
 }

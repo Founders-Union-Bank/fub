@@ -1,7 +1,7 @@
 package org.fub.service;
 
 import jakarta.validation.constraints.NotNull;
-import org.fub.model.PaymentDetail;
+import org.fub.request.PaymentDetail;
 import org.fub.request.PaymentDetailRequest;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +11,13 @@ import java.util.List;
 public interface PaymentService {
     PaymentDetail createPaymentDetails(PaymentDetailRequest paymentDetail);
 
-    PaymentDetail fetchPaymentDetails(String userId, String paymentId);
+    PaymentDetail fetchPaymentDetail(String userId, String paymentId, Long crewId);
 
-    boolean deletePaymentDetails(String userId, @NotNull String paymentId);
+    boolean deletePaymentDetail(String userId, @NotNull String paymentId);
 
-    List<PaymentDetail> fetchPaymentsDetail(String userId);
+    PaymentDetail updatePaymentDetails(String userId, String paymentId,Long crewId, PaymentDetail request);
 
-    PaymentDetail updatePaymentDetails(String userId, String paymentId, PaymentDetailRequest request);
+    boolean generatePaymentDetailsForMembers(Long crewId);
+
+    List<PaymentDetail> fetchPaymentsDetails(String userId, @NotNull Long crewId);
 }

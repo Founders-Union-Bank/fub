@@ -1,15 +1,23 @@
 package org.fub.service;
 
-import org.fub.request.GroupRequest;
-import org.fub.response.GroupResponse;
+import org.fub.request.CrewRequest;
+import org.fub.response.CrewResponse;
+import org.fub.response.UserGroupsResponse;
+import org.fub.response.UserResponse;
 
 import java.util.List;
 
 
 public interface GroupService {
-    GroupResponse createGroup(String userId, GroupRequest group);
+    CrewResponse createGroup( CrewRequest group);
 
-    GroupResponse fetchGroup(Long groupId);
+    CrewResponse fetchGroup(Long groupId);
 
-    GroupResponse addUsersToGroup(List<String> userIds, Long groupId);
+    UserGroupsResponse addUsersToGroup(List<String> userIds, Long groupId);
+
+    List<CrewResponse> fetchAllGroups(String searchText);
+
+    UserGroupsResponse fetchGroupsByUserId(String userId);
+
+    List<UserResponse> getAllUsersFromTheCrew(Long crewId);
 }
