@@ -17,10 +17,6 @@ import java.util.Date;
 @Component
 public class JWTTokenUtils {
 
-    private final String jwtSecretKey="FOUNDERSUNIONBANKAPPLICATIONSECRETKEYAUTHOURSARANKUMARVIJAYANHFSAHSAHSADHAGDGHGASDHSDHHJSDKAJSKFJSAF";
-
-    private final int expirationTime= 3600000;
-
     @Autowired
     private UserRepository repository;
 
@@ -28,21 +24,21 @@ public class JWTTokenUtils {
     public String getJWTToken(String userName) {
         String token = null;
 
-        UserModel user = repository.findByEmail(userName).orElseThrow(()->new UserNotFoundException("User doesn't exist with the username or check the credentials"));
+        UserModel user = repository.findByEmail(userName).orElseThrow(() -> new UserNotFoundException("User doesn't exist with the username or check the credentials"));
 
         try {
+            int expirationTime = 3600000;
             token = Jwts.builder()
                     .setSubject("FUB")
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(new Date().getTime()+expirationTime))
-                    .claim("userId",user.getUserId())
-                    .claim("isAdmin",user.isAdmin())
-                    .claim("role",user.getRoles())
-                    .signWith(getSecretKey(),SignatureAlgorithm.HS512)
+                    .setExpiration(new Date(new Date().getTime() + expirationTime))
+                    .claim("userId", user.getUserId())
+                    .claim("isAdmin", user.isAdmin())
+                    .claim("role", user.getRoles())
+                    .signWith(getSecretKey(), SignatureAlgorithm.HS512)
                     .compact();
             return token;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new JWTTokenCreationException(e.getMessage());
         }
     }
@@ -55,7 +51,8 @@ public class JWTTokenUtils {
                 .getSubject();
     }
 
-    public SecretKey getSecretKey(){
-         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey));
+    public SecretKey getSecretKey() {
+        String jwtSecretKey = "FOUNDERSUNIONBANKAPPLICATIONSECRETKEYAUTHOURSARANKUMARVIJAYANHFSAHSAHSADHAGDGHGASDHSDHHJSDKAJSKFJSAF";
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey));
     }
 }

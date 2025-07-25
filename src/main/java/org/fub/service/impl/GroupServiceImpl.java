@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -46,11 +45,11 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public UserGroupsResponse addUsersToGroup(List<String> userIds, Long groupId) {
         CrewModel model = groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("Group doesn't exist"));
-        userIds.forEach(user -> {
-            UserModel userModel = userRepository.findById(user).orElseThrow(() -> new UserNotFoundException("User Doesn't exist for the id : " + user));
-            userModel.addCrew(model);
-            model.addUser(userModel);
-        });
+
+        UserModel userModel = userRepository.findById(userIds.get(0)).orElseThrow(() -> new UserNotFoundException("User Doesn't exist for the id : "));
+        userModel.addCrew(model);
+        model.addUser(userModel);
+
         model.setTotalMember(model.getUsers().size());
         groupRepository.save(model);
 
@@ -60,19 +59,19 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<CrewResponse> fetchAllGroups(String searchText) {
         List<CrewModel> crews = groupRepository.findByCrewNameLikeIgnoreCase(searchText);
-        return crews.stream().map(crew -> {
-            return mapper.map(crew, CrewResponse.class);
-        }).toList();
+        return crews.stream().map(crew -> mapper.map(crew, CrewResponse.class)
+        ).toList();
     }
 
     @Override
     public UserGroupsResponse fetchGroupsByUserId(String userId) {
         UserModel userModel = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User doesn't exist"));
         UserGroupsResponse response = new UserGroupsResponse();
+        response.setUserId(userId);
         response.setCrews(userModel
                 .getCrews()
                 .stream()
-                .map(crew->mapper.map(crew,CrewResponse.class))
+                .map(crew -> mapper.map(crew, CrewResponse.class))
                 .toList());
         return response;
     }

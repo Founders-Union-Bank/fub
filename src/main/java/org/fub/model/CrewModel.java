@@ -1,9 +1,7 @@
 package org.fub.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
@@ -12,7 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity(name = "crew")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CrewModel {
